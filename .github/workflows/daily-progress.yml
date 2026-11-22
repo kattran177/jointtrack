@@ -1,0 +1,55 @@
+name: Daily Progress Commit
+
+# Runs at 08:00 UTC every day (09:00 Irish Standard Time / 10:00 IST summer)
+on:
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch: # allow manual trigger from GitHub UI
+
+jobs:
+  daily-commit:
+    name: Advance milestone and commit
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Use the GH_TOKEN secret so the push is authenticated.
+          # Set this in: Settings → Secrets → Actions → New repository secret
+          token: ${{ secrets.GH_TOKEN || github.token }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "JointTrack Bot"
+          git config user.email "bot@jointtrack.dev"
+
+      - name: Run tests (verify baseline still passes)
+        run: npm test
+
+      - name: Advance daily milestone
+        run: node scripts/daily-milestone.js
+
+      - name: Stage and commit if there are changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            # Read the commit message written by the milestone script
+            MSG=$(cat .daily-commit-msg 2>/dev/null || echo "chore: daily progress update")
+            git commit -m "$MSG"
+            git push
+            echo "✅ Committed and pushed: $MSG"
+          else
+            echo "ℹ️  No changes — all milestones may already be complete."
+          fi

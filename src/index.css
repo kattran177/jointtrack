@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+/*
+ * JointTrack global styles
+ * Design principles: high contrast, large touch targets, legible type for 60+ users
+ */
+
+:root {
+  /* Brand palette */
+  --jt-teal: #0d7377;
+  --jt-teal-dark: #0a5a5e;
+  --jt-amber: #f59e0b;
+  --jt-red: #dc2626;
+  --jt-green: #16a34a;
+
+  /* Minimum accessible body text: 18px for older adults */
+  font-size: 18px;
+  line-height: 1.6;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: #f9fafb;
+  color: #111827;
+}
+
+/* Minimum 44×44 px touch targets (WCAG 2.5.5) */
+button, a, [role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Focus ring — visible and high-contrast */
+:focus-visible {
+  outline: 3px solid var(--jt-teal);
+  outline-offset: 2px;
+}
