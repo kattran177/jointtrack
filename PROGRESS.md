@@ -3,3 +3,7 @@
 ## 2026-11-22 — Day 1
 
 Day 1 — Project scaffold; biomechanics math module (vectors, angles, smoothing, STS counter); 50+ Vitest unit tests; README, DISCLAIMER, LICENSE.
+
+## 2026-11-23 — Day 2
+
+Day 2 — OKS/OHS question definitions, 0–48 scoring logic, delta tracking, red-flag symptom prompts, unit tests for all scoring paths.
