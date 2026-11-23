@@ -11,3 +11,7 @@ Day 2 — OKS/OHS question definitions, 0–48 scoring logic, delta tracking, re
 ## 2026-11-23 — Day 3
 
 Day 3 — MediaPipe tasks-vision Pose Landmarker (WASM), requestAnimationFrame camera loop, landmark confidence gating, real-time joint angle overlay canvas.
+
+## 2026-11-23 — Day 4
+
+Day 4 — Dexie IndexedDB schema, session and assessment repositories, full JSON backup/restore, Delete All Data utility, storage integration tests.
