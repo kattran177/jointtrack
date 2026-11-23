@@ -1,6 +1,6 @@
 # JointTrack — Disclaimer and Scope of Use
 
-**Version 1.0 | Last updated: 2024**
+**Version 1.0**
 
 ---
 
