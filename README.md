@@ -8,7 +8,7 @@
 
 ## Problem Context
 
-In 2024 the HSE removed GP-referred hip and knee MRIs from the Community Diagnostics Scheme for adults, leaving many people aged 60+ waiting months for physiotherapy or orthopaedic specialist review with no objective record of how their condition is changing over time.
+In November 2026 the HSE removed GP-referred hip and knee MRIs from the Community Diagnostics Scheme for adults, leaving many people aged 60+ waiting months for physiotherapy or orthopaedic specialist review with no objective record of how their condition is changing over time.
 
 JointTrack fills this documentation gap. It runs entirely in the browser — no data leaves the device — and generates a clear longitudinal summary a GP, physio, or consultant can review in under two minutes.
 
