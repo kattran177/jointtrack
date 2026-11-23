@@ -7,3 +7,7 @@ Day 1 — Project scaffold; biomechanics math module (vectors, angles, smoothing
 ## 2026-11-23 — Day 2
 
 Day 2 — OKS/OHS question definitions, 0–48 scoring logic, delta tracking, red-flag symptom prompts, unit tests for all scoring paths.
+
+## 2026-11-23 — Day 3
+
+Day 3 — MediaPipe tasks-vision Pose Landmarker (WASM), requestAnimationFrame camera loop, landmark confidence gating, real-time joint angle overlay canvas.
