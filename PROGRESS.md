@@ -15,3 +15,7 @@ Day 3 — MediaPipe tasks-vision Pose Landmarker (WASM), requestAnimationFrame c
 ## 2026-11-24 — Day 4
 
 Day 4 — Dexie IndexedDB schema, session and assessment repositories, full JSON backup/restore, Delete All Data utility, storage integration tests.
+
+## 2026-11-24 — Day 5
+
+Day 5 — Recharts integration, ROM trend line chart, OKS/OHS score over time, session comparison view, deterioration highlighting.
