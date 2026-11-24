@@ -1,9 +1,9 @@
 /**
- * Storage module — IndexedDB repositories via Dexie, JSON export/import,
- * and data-reset utilities.
- *
- * Day 4 milestone.
- * This file is a placeholder stub so the architecture is visible from Day 1.
+ * Storage module — IndexedDB (Dexie) schema, session repositories,
+ * session service, JSON export/import, and data-reset utilities.
  */
 
-export {}
+export * from './db.ts'
+export * from './repositories.ts'
+export * from './sessionService.ts'
+export * from './dataManager.ts'

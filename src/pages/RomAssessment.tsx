@@ -3,14 +3,12 @@
  *
  * Lets the user select an assessment mode (knee flexion, sit-to-stand, or
  * hip abduction), runs the live camera view, displays real-time angle
- * readouts, and shows a session summary when they stop.
- *
- * This page does not persist data to IndexedDB yet — that is Day 4.
- * It demonstrates the full end-to-end camera → angle → display pipeline.
+ * readouts, and saves the session to IndexedDB when the user finishes.
  */
 
 import { useCallback, useRef, useState } from 'react'
 import { CameraView } from '../components/CameraView.tsx'
+import { saveRomSession, saveStsSession } from '../storage/sessionService.ts'
 import type { AssessmentMode, ProcessedFrame } from '../vision/frameProcessor.ts'
 
 // ---------------------------------------------------------------------------
@@ -30,6 +28,7 @@ interface SessionSummary {
   stsReps:       number | null
   stsTime:       number | null
   sampleCount:   number
+  savedSessionId: number | null
 }
 
 // ---------------------------------------------------------------------------
@@ -44,7 +43,9 @@ export function RomAssessment() {
   const [liveRight, setLiveRight] = useState<number | null>(null)
   const [liveReps,  setLiveReps]  = useState<number>(0)
 
-  const samplesRef = useRef<AngleSample[]>([])
+  const samplesRef  = useRef<AngleSample[]>([])
+  const startIsoRef = useRef<string>(new Date().toISOString())
+  const stsTimeRef  = useRef<number | null>(null)
 
   // ── Frame result handler ─────────────────────────────────────────────────
 
@@ -62,13 +63,16 @@ export function RomAssessment() {
     }
     if (frame.sts) {
       setLiveReps(frame.sts.reps)
+      if (frame.sts.completedAt !== null) stsTimeRef.current = frame.sts.completedAt
     }
   }, [])
 
   // ── Start / stop ─────────────────────────────────────────────────────────
 
   const handleStart = () => {
-    samplesRef.current = []
+    samplesRef.current  = []
+    startIsoRef.current = new Date().toISOString()
+    stsTimeRef.current  = null
     setSummary(null)
     setLiveLeft(null)
     setLiveRight(null)
@@ -76,25 +80,49 @@ export function RomAssessment() {
     setIsActive(true)
   }
 
-  const handleStop = () => {
+  const handleStop = async () => {
     setIsActive(false)
-    const samples = samplesRef.current
+    const samples  = samplesRef.current
+    if (samples.length === 0) { setSummary(null); return }
 
-    if (samples.length === 0) {
-      setSummary(null)
-      return
+    const lefts  = samples.map((s) => s.leftDeg).filter((v) => v > 0)
+    const rights = samples.map((s) => s.rightDeg).filter((v) => v > 0)
+    const peakLeft  = lefts.length  ? Math.max(...lefts)  : null
+    const peakRight = rights.length ? Math.max(...rights) : null
+    const meanLeft  = lefts.length  ? lefts.reduce((a, b) => a + b, 0) / lefts.length   : 0
+    const meanRight = rights.length ? rights.reduce((a, b) => a + b, 0) / rights.length : 0
+
+    // ── Persist to IndexedDB ─────────────────────────────────────────────
+    let savedSessionId: number | null = null
+    try {
+      if (mode === 'sit-to-stand') {
+        savedSessionId = await saveStsSession({
+          startedAt:      startIsoRef.current,
+          repsCompleted:  liveReps,
+          completionTime: stsTimeRef.current,
+          targetReps:     5,
+        })
+      } else {
+        savedSessionId = await saveRomSession({
+          assessmentType: mode as 'knee-flexion' | 'hip-abduction',
+          side:           'bilateral',
+          startedAt:      startIsoRef.current,
+          ...(peakLeft  !== null && { left:  { peakFlexionDeg: peakLeft,  meanFlexionDeg: meanLeft,  frameCount: lefts.length  } }),
+          ...(peakRight !== null && { right: { peakFlexionDeg: peakRight, meanFlexionDeg: meanRight, frameCount: rights.length } }),
+        })
+      }
+    } catch (err) {
+      console.error('Failed to save session:', err)
     }
-
-    const lefts  = samples.map((s) => s.leftDeg)
-    const rights = samples.map((s) => s.rightDeg)
 
     setSummary({
       mode,
-      peakLeftDeg:  lefts.length  ? Math.max(...lefts)  : null,
-      peakRightDeg: rights.length ? Math.max(...rights) : null,
-      stsReps:  liveReps > 0 ? liveReps : null,
-      stsTime:  null, // populated via STS completedAt in a future session
-      sampleCount: samples.length,
+      peakLeftDeg:    peakLeft,
+      peakRightDeg:   peakRight,
+      stsReps:        liveReps > 0 ? liveReps : null,
+      stsTime:        stsTimeRef.current,
+      sampleCount:    samples.length,
+      savedSessionId,
     })
   }
 
@@ -189,7 +217,7 @@ export function RomAssessment() {
             />
             <div className="text-center">
               <button
-                onClick={handleStop}
+                onClick={() => { void handleStop() }}
                 className="bg-red-600 hover:bg-red-700 text-white font-semibold px-8 py-3 rounded-lg min-h-[44px] transition-colors"
               >
                 Finish & Save Session
@@ -281,7 +309,9 @@ function SessionSummaryCard({ summary }: { summary: SessionSummary }) {
       )}
 
       <p className="text-xs text-gray-500 border-t border-green-200 pt-3">
-        Results will be saved to your device in Day 4 (IndexedDB storage).
+        {summary.savedSessionId !== null
+          ? `✓ Saved to local storage (session #${summary.savedSessionId})`
+          : 'Could not save session — check browser storage permissions.'}
       </p>
     </div>
   )

@@ -6,9 +6,10 @@
  */
 
 import { useState } from 'react'
+import { Privacy } from './pages/Privacy.tsx'
 import { RomAssessment } from './pages/RomAssessment.tsx'
 
-type Page = 'home' | 'rom' | 'questionnaire' | 'trends' | 'report'
+type Page = 'home' | 'rom' | 'questionnaire' | 'trends' | 'report' | 'privacy'
 
 function App() {
   const [page, setPage] = useState<Page>('home')
@@ -43,11 +44,12 @@ function App() {
         <nav aria-label="Main navigation" className="max-w-4xl mx-auto px-4 flex gap-1 overflow-x-auto">
           {(
             [
-              { id: 'home',          label: 'Home'           },
-              { id: 'rom',           label: '📐 Measure ROM' },
-              { id: 'questionnaire', label: '📋 Questionnaire (Day 2)' },
-              { id: 'trends',        label: '📈 Trends (Day 5)'        },
-              { id: 'report',        label: '📄 Report (Day 6)'        },
+              { id: 'home',          label: 'Home'                        },
+              { id: 'rom',           label: '📐 Measure ROM'               },
+              { id: 'questionnaire', label: '📋 Questionnaire (Day 2 UI)'  },
+              { id: 'trends',        label: '📈 Trends (Day 5)'            },
+              { id: 'report',        label: '📄 Report (Day 6)'            },
+              { id: 'privacy',       label: '🔒 Privacy & Data'            },
             ] as { id: Page; label: string }[]
           ).map(({ id, label }) => (
             <button
@@ -90,6 +92,7 @@ function App() {
         {page === 'questionnaire' && <ComingSoon title="Questionnaire" day={2} note="Oxford Knee/Hip Score (OKS/OHS) — logic and tests already built in src/assessments/. UI coming Day 2." />}
         {page === 'trends'        && <ComingSoon title="Trend Charts"   day={5} />}
         {page === 'report'        && <ComingSoon title="Clinician Report" day={6} />}
+        {page === 'privacy'       && <Privacy />}
       </main>
 
       {/* ── Footer ── */}
@@ -158,11 +161,11 @@ function HomePage({ onNavigate }: { onNavigate: (p: Page) => void }) {
       </div>
 
       <div className="bg-teal-50 border border-teal-200 rounded-xl p-5 text-center">
-        <p className="text-teal-800 font-semibold mb-1">🏗 Day 3 Milestone Complete</p>
+        <p className="text-teal-800 font-semibold mb-1">🏗 Day 4 Milestone Complete</p>
         <p className="text-teal-700 text-sm">
-          MediaPipe Pose Landmarker integrated with live joint angle overlay,
-          frame processor, signal smoothing, and the full ROM assessment UI.
-          117 unit tests still passing.
+          IndexedDB persistence via Dexie — sessions, ROM measurements, STS results, and
+          PROM records all saved locally. JSON export, import, and Delete All Data controls
+          live in the Privacy &amp; Data tab. 134 unit tests still passing.
         </p>
       </div>
     </div>
