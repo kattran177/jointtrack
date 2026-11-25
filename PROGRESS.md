@@ -19,3 +19,7 @@ Day 4 — Dexie IndexedDB schema, session and assessment repositories, full JSON
 ## 2026-11-24 — Day 5
 
 Day 5 — Recharts integration, ROM trend line chart, OKS/OHS score over time, session comparison view, deterioration highlighting.
+
+## 2026-11-25 — Day 6
+
+Day 6 — Typed HL7 FHIR R4 Observation and QuestionnaireResponse builders, one-page jsPDF clinician summary (baseline vs. latest, trend chart, red-flag checklist).
