@@ -23,3 +23,7 @@ Day 5 — Recharts integration, ROM trend line chart, OKS/OHS score over time, s
 ## 2026-11-25 — Day 6
 
 Day 6 — Typed HL7 FHIR R4 Observation and QuestionnaireResponse builders, one-page jsPDF clinician summary (baseline vs. latest, trend chart, red-flag checklist).
+
+## 2026-11-26 — Day 7
+
+Day 7 — WCAG 2.1 AA pass: skip nav, focus management, ARIA roles, colour contrast audit, minimum touch targets; red-flag symptom modal; screen-reader testing.
