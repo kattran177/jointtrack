@@ -27,3 +27,7 @@ Day 6 — Typed HL7 FHIR R4 Observation and QuestionnaireResponse builders, one-
 ## 2026-11-26 — Day 7
 
 Day 7 — WCAG 2.1 AA pass: skip nav, focus management, ARIA roles, colour contrast audit, minimum touch targets; red-flag symptom modal; screen-reader testing.
+
+## 2026-11-27 — Day 8
+
+Day 8 — Completed README with Mermaid architecture diagram, HSE context section, clinical pilot adaptation guide, contributing guidelines.
